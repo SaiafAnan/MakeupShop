@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopx/models/product.dart';
+import 'package:shopx/views/product_detail_page.dart';
 
 class ProductTile extends StatelessWidget {
   final Product product;
@@ -15,35 +16,47 @@ class ProductTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 180,
-                  width: double.infinity,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
+            InkWell(
+              onTap: () {
+                Get.toNamed(
+                  "/detail",
+                  arguments: {
+                    'title': product.name.toString(),
+                    'image': product.imageLink.toString(),
+                    'description': product.description.toString()
+                  },
+                );
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    height: 180,
+                    width: double.infinity,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Image.network(
+                      product.imageLink!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Image.network(
-                    product.imageLink!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  child: Obx(() => CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: product.isFavorite.value
-                              ? Icon(Icons.favorite_rounded)
-                              : Icon(Icons.favorite_border),
-                          onPressed: () {
-                            product.isFavorite.toggle();
-                          },
-                        ),
-                      )),
-                )
-              ],
+                  Positioned(
+                    right: 0,
+                    child: Obx(() => CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                            icon: product.isFavorite.value
+                                ? Icon(Icons.favorite_rounded)
+                                : Icon(Icons.favorite_border),
+                            onPressed: () {
+                              product.isFavorite.toggle();
+                            },
+                          ),
+                        )),
+                  )
+                ],
+              ),
             ),
             SizedBox(height: 8),
             Text(
